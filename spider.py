@@ -1,3 +1,5 @@
+from sys import argv
+
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
@@ -7,7 +9,7 @@ from selenium.webdriver.support import expected_conditions as EC
 
 from bs4 import BeautifulSoup
 
-browser = webdriver.Chrome()
+browser = webdriver.PhantomJS() if len(argv) == 1 else webdriver.Chrome()
 
 RATING_NUMBER = {
     'E-':1, 'E':2, 'E+':3,
@@ -34,8 +36,18 @@ def login(username, password):
     form_password.send_keys(Keys.RETURN)
     if browser.current_url == 'https://ust.space/home':
         return
+    elif browser.current_url == 'https://ust.space/login':
+        error_page_soup = BeautifulSoup(browser.page_source)
+        error_message = error_page_soup.find(class_='alert').get_text()
+        if 'reCaptcha' in error_message:
+            raise RuntimeError('reCaptcha is triggered. '
+                               'This is probably because you are reapeatedly '
+                               'attempting to login in a short period of time. '
+                               'Please run this tool later to get rid of it.')
+        else:
+            raise ValueError('invalid credential. Message from the website: {0}'.format(error_message))
     else:
-        raise ValueError('Error on login.')
+        raise RuntimeError('Unknown error on login.')
 
 def request_review_page_soup(course_code):
     course_code = course_code.upper()
