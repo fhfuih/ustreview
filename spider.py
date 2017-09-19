@@ -9,7 +9,15 @@ from selenium.webdriver.support import expected_conditions as EC
 
 from bs4 import BeautifulSoup
 
-browser = webdriver.PhantomJS() if len(argv) == 1 else webdriver.Chrome()
+if len(argv) > 1:
+    if argv[1] == '--chrome' or argv[1] == '--debug':
+        browser = webdriver.Chrome()
+    elif argv[1] == '--firefox':
+        browser = webdriver.Firefox()
+    else:
+        browser = webdriver.PhantomJS()
+else:
+    browser = webdriver.PhantomJS(service_args=["--webdriver-loglevel=ERROR"])
 
 RATING_NUMBER = {
     'E-':1, 'E':2, 'E+':3,
@@ -56,10 +64,11 @@ def request_review_page_soup(course_code):
         raise ValueError('Course {0} doesn\'t exist.'.format(course_code))
 
 
-    WebDriverWait(browser, 10).until(
-        EC.presence_of_element_located((By.XPATH, '//ul[@class="menu-content"]/li[2]'))
+    elem = WebDriverWait(browser, 10).until(
+        EC.presence_of_element_located((By.XPATH, '//ul[@class="menu-content"]/li[2] | //p[@class="course-review-content-message"]'))
     )
-    return BeautifulSoup(browser.page_source, 'html.parser')
+    is_full = elem.tag_name == 'li'
+    return BeautifulSoup(browser.page_source, 'html.parser'), is_full
 
 def get_course_rating(soup):
     tag = soup.find('div', class_='course-review-statistics').ul
@@ -96,6 +105,13 @@ def get_instructor_review(soup):
     average_text = [NUMBER_TO_TEXT[round(x)] for x in average]
     variance = [round(sum2[i]/reviews_count-average[i]**2, 2) for i in range(4)]
     return average_text, average, variance
+
+def get_limited_review(soup):
+    instructor = soup.find('p', class_='details').em.get_text()
+    review = soup.find('ul', class_='rating-container')
+    ratings_text = [x.get_text() for x in review.find_all('span')]
+    ratings = [int(x['class'][1][-1]) for x in review.find_all('span')]
+    return ratings_text, ratings, instructor
 
 def quit():
     browser.quit()
