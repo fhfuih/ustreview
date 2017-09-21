@@ -6,6 +6,16 @@
 
 A simple spider used to enquire about the reviews of professors in HKUST. Data is captured from 'Course Review' at [UST Space](https://ust.space).
 
+## 功能 Features
+
+* 查看课程评分
+
+  See the overall rating of a course
+
+* 计算教授平均评分和方差
+
+  Calculate the average rating and variance of a specific instructor
+
 ## 开发环境 Requirement
 
 Python 3.5

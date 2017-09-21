@@ -16,11 +16,11 @@ if len(argv) > 1:
         browser = webdriver.Firefox()
     else:
         browser = webdriver.PhantomJS(
-            service_args=["--webdriver-loglevel=ERROR"]，
+            service_args=["--webdriver-loglevel=ERROR"],
             service_log_path='ustreview.log')
 else:
     browser = webdriver.PhantomJS(
-        service_args=["--webdriver-loglevel=ERROR"]，
+        service_args=["--webdriver-loglevel=ERROR"],
         service_log_path='ustreview.log')
 
 RATING_NUMBER = {
