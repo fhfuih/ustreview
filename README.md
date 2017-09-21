@@ -63,3 +63,7 @@ The software icon is derived from [Professor by Saeful Muslim from the Noun Proj
 本软件作为个人制作的第三方软件，并非附属于香港科技大学、[UST Space](https://ust.space)网站或者任何其它组织、团队。
 
 This software is a third-party software, and is not affiliated to HKUST, [UST Space](https://ust.space) website or any other organization or group.
+
+本软件分发时所附带的`phantomjs.exe`为未经修改的PhantomJS二进制分发文件，其许可原文将会附在其他文件中。
+
+The `phantomjs.exe` file that is included in the distribution is an unmodified copy of PhantomJS binary distribution. Its license will be specified in another file.
