@@ -6,6 +6,8 @@
 
 A simple spider used to enquire about the reviews of professors in HKUST. Data is captured from 'Course Review' at [UST Space](https://ust.space).
 
+![Showcase](images/showcase.gif)
+
 ## 功能 Features
 
 * 查看课程评分
